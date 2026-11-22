@@ -73,10 +73,17 @@ jobs:
 
       - name: Apply the brand
         shell: bash
+        env:
+          RB_CODE: ${{ secrets.RB_CONTROLLER_CODE }}
         run: |
           bash brand/apply-brand.sh "${{ inputs.brand }}"
           source "brand/${{ inputs.brand }}/brand.env"
           echo "BRAND_FILE_NAME=$FILE_NAME" >> "$GITHUB_ENV"
+          # Apps that connect out carry the controller code (a repository secret, never in the code).
+          if [ "${CONTROLLER:-}" = "yes" ]; then
+            if [ -z "$RB_CODE" ]; then echo "RB_CONTROLLER_CODE secret missing"; exit 1; fi
+            echo "RB_CONTROLLER_CODE=$RB_CODE" >> "$GITHUB_ENV"
+          fi
 
       - name: Install build runtime
         run: |

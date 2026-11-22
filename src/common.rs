@@ -2523,6 +2523,17 @@ fn apply_built_in_brand() {
     }
 }
 
+/// Rick Burn Remote Support: the code that lets an app START a connection through our server.
+/// Built in only for the apps that connect out (Remote Access, Support Desk) from a GitHub
+/// secret at build time (RB_CONTROLLER_CODE), never in the public code. The server only accepts
+/// connection requests carrying it; other copies can still receive connections.
+pub fn controller_licence(key: &str) -> String {
+    match option_env!("RB_CONTROLLER_CODE") {
+        Some(code) if !code.is_empty() => code.to_owned(),
+        _ => key.to_owned(),
+    }
+}
+
 pub fn load_custom_client() {
     apply_built_in_brand();
     #[cfg(debug_assertions)]
