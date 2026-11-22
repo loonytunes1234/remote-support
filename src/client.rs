@@ -956,7 +956,7 @@ impl Client {
             id: peer.to_owned(),
             token: token.to_owned(),
             nat_type: nat_type.into(),
-            licence_key: crate::common::controller_licence(key),
+            licence_key: crate::common::controller_licence(&key),
             conn_type: conn_type.into(),
             version: crate::VERSION.to_owned(),
             udp_port: udp_nat_port as _,
@@ -1823,7 +1823,7 @@ impl Client {
                 secure,
             );
             msg_out.set_request_relay(RequestRelay {
-                licence_key: crate::common::controller_licence(key),
+                licence_key: crate::common::controller_licence(&key),
                 id: peer.to_owned(),
                 token: token.to_owned(),
                 uuid: uuid.clone(),
