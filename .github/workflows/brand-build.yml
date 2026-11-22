@@ -87,6 +87,10 @@ jobs:
           bash brand/apply-brand.sh "${{ inputs.brand }}"
           source "brand/${{ inputs.brand }}/brand.env"
           echo "BRAND_FILE_NAME=$FILE_NAME" >> "$GITHUB_ENV"
+          # The installer copies the folder and then runs <app-name>.exe, so the program file
+          # inside must carry the brand's app-name (as RustDesk's own custom clients do).
+          APP_EXE=$(python3 -c "import json;print(json.load(open('res/brand.json'))['app-name'])")
+          echo "BRAND_APP_EXE=$APP_EXE" >> "$GITHUB_ENV"
 
       - name: Restore bridge files
         uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
@@ -200,7 +204,8 @@ jobs:
           sed -i '/dpiAware/d' res/manifest.xml
           pushd ./libs/portable
           pip3 install -r requirements.txt
-          python3 ./generate.py -f ../../rustdesk/ -o . -e ../../rustdesk/rustdesk.exe
+          mv ../../rustdesk/rustdesk.exe "../../rustdesk/${BRAND_APP_EXE}.exe"
+          python3 ./generate.py -f ../../rustdesk/ -o . -e "../../rustdesk/${BRAND_APP_EXE}.exe"
           popd
           mkdir -p ./Output
           mv ./target/release/rustdesk-portable-packer.exe "./Output/${BRAND_FILE_NAME}.exe"
