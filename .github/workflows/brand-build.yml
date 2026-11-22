@@ -224,6 +224,22 @@ jobs:
           mv ./target/release/rustdesk-portable-packer.exe "./Output/${BRAND_FILE_NAME}.exe"
           sha256sum ./Output/*.exe
 
+      - name: Lock connect-out apps before GitHub stores them
+        # Build files on a public repository can be downloaded by anyone signed in to GitHub, and
+        # these carry a controller code: store them only encrypted (password = RB_ARTIFACT_PASS,
+        # kept on Rick's Mac). Unlock: openssl enc -d -aes-256-cbc -pbkdf2 -pass file:artifact-pass
+        if: env.BRAND_CONTROLLER == 'yes'
+        shell: bash
+        env:
+          RB_PASS: ${{ secrets.RB_ARTIFACT_PASS }}
+        run: |
+          if [ -z "$RB_PASS" ]; then echo "RB_ARTIFACT_PASS secret missing"; exit 1; fi
+          for f in ./Output/*.exe; do
+            openssl enc -aes-256-cbc -pbkdf2 -salt -pass env:RB_PASS -in "$f" -out "$f.enc"
+            rm -f "$f"
+          done
+          ls -l ./Output
+
       - name: Upload the connector
         uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
         with:
