@@ -13,6 +13,11 @@ sed -i.bak -e "s/static const Color accent = Color(0xFF0071FF)/static const Colo
   -e "s/static const Color accent80 = Color(0xAA0071FF)/static const Color accent80 = Color(0xAA${ACCENT:4})/" \
   -e "s/static const Color idColor = Color(0xFF00B6F0)/static const Color idColor = Color($ID_COLOUR)/" \
   -e "s/static const Color button = Color(0xFF2C8CFF)/static const Color button = Color($BUTTON)/" flutter/lib/common.dart
+# Banner cards (install / permissions): brand gradient instead of RustDesk's pink
+if [ -n "${CARD_FROM:-}" ]; then
+  sed -i.bak -e "s/Color.fromARGB(255, 226, 66, 188)/Color($CARD_FROM)/" -e "s/Color.fromARGB(255, 244, 114, 124)/Color($CARD_TO)/" flutter/lib/desktop/pages/desktop_home_page.dart
+  rm -f flutter/lib/desktop/pages/desktop_home_page.dart.bak
+fi
 # Names shown in the program's file properties
 sed -i.bak -e "s/\"RustDesk Remote Desktop\"/\"$APP_NAME\"/" -e "s/VALUE \"ProductName\", \"RustDesk\"/VALUE \"ProductName\", \"$APP_NAME\"/" flutter/windows/runner/Runner.rc
 sed -i.bak -e "s/^ProductName = \"RustDesk\"/ProductName = \"$APP_NAME\"/" -e "s/^FileDescription = \"RustDesk Remote Desktop\"/FileDescription = \"$APP_NAME\"/" libs/portable/Cargo.toml

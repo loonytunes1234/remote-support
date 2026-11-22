@@ -1,0 +1,22 @@
+{
+  "app-name": "Rick Burn Support Desk",
+  "conn-type": "outgoing",
+  "disable-ab": "Y",
+  "disable-account": "Y",
+  "override-settings": {
+    "custom-rendezvous-server": "support.rickburn.net",
+    "relay-server": "support.rickburn.net",
+    "api-server": "",
+    "key": "YjmjogQF68AD1u7CMKyt4xfGTdALKCzirMPsGo1VTcQ=",
+    "allow-websocket": "N",
+    "hide-help-cards": "Y",
+    "hide-powered-by-me": "Y",
+    "hide-network-settings": "Y",
+    "hide-server-settings": "Y",
+    "hide-proxy-settings": "Y",
+    "hide-websocket-settings": "Y"
+  },
+  "default-settings": {
+    "theme": "dark"
+  }
+}
