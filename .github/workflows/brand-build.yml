@@ -68,6 +68,7 @@ jobs:
     name: Windows x64 (${{ inputs.brand }})
     needs: [build-RustDeskTempTopMostWindow, generate-bridge]
     runs-on: windows-2022
+    timeout-minutes: 150
     steps:
       - name: Export GitHub Actions cache environment variables
         uses: actions/github-script@d7906e4ad0b1822421a7e6a35d5ca353c962f410 # v6
