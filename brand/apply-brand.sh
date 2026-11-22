@@ -18,6 +18,12 @@ if [ -n "${CARD_FROM:-}" ]; then
   sed -i.bak -e "s/Color.fromARGB(255, 226, 66, 188)/Color($CARD_FROM)/" -e "s/Color.fromARGB(255, 244, 114, 124)/Color($CARD_TO)/" flutter/lib/desktop/pages/desktop_home_page.dart
   rm -f flutter/lib/desktop/pages/desktop_home_page.dart.bak
 fi
+# The line under "Your Desktop" (English), e.g. a scam warning for quick support
+if [ -n "${TIP:-}" ]; then
+  sed -i.bak -e "s|(\"desk_tip\", \"[^\"]*\")|(\"desk_tip\", \"$TIP\")|" src/lang/en.rs
+  rm -f src/lang/en.rs.bak
+  grep -c "$TIP" src/lang/en.rs
+fi
 # Names shown in the program's file properties
 sed -i.bak -e "s/\"RustDesk Remote Desktop\"/\"$APP_NAME\"/" -e "s/VALUE \"ProductName\", \"RustDesk\"/VALUE \"ProductName\", \"$APP_NAME\"/" flutter/windows/runner/Runner.rc
 sed -i.bak -e "s/^ProductName = \"RustDesk\"/ProductName = \"$APP_NAME\"/" -e "s/^FileDescription = \"RustDesk Remote Desktop\"/FileDescription = \"$APP_NAME\"/" libs/portable/Cargo.toml
